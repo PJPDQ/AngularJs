@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <title>Commentary Blogs</title>
+	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	    <link rel="stylesheet" href="css/style.css">
+	  </head>
+	  <body ng-app="blogs" ng-controller="blogController">
+
+	  	<!--Nav Bar-->
+	  	<nav class="navbar navbar-default">
+	  		<div class="container-fuild">
+	  			<div class="navbar-header">
+	  				<a class="navbar-brand" href="#">Blogs</a>
+	  			</div>
+	  		</div>
+	  	</nav>
+
+	  	<!-- Side Navigation Pane-->
+	  	<div class="container-fluid">
+	  		<div class="row content" ng-if="addPost">
+	  			<div class="col-sm-3 sidenav">
+	  				<h1>Home</h1>	  				
+		  			<ul class="nav nav-pills nav-stacked" ng-repeat="post in posts">
+	  					<li><a href="#{{post.id}}">{{post.title}}</a></li>
+	  				</ul>
+	  			</div>
+	  			<div class="col-sm-9 post-form"> 
+					<button 
+				    	class="btn btn-primary" 
+				    	ng-click="addPost = !addPost" 
+				    	ng-show="!addPost">Add Post
+			    	</button>
+
+				    <button 
+				    	class="btn btn-danger" 
+				    	ng-click="addPost = !addPost" 
+				    	ng-show="addPost">Cancel
+				    </button>
+
+				   <!-- Adding Post -->
+				    <div class="listing-form" ng-if="addPost">
+
+				        <h3>Add Post</h3>
+
+				        <div class="row post-form-row">
+				        	<div class="col-sm-8">
+				        		<div class="input-group">
+				        			<span class="input-group-addon">Title: </span>
+				        			<input 
+						              	type="text" 
+						              	placeholder="Title" 
+						              	class="form-control" 
+						              	ng-model="newPost.title">
+						        </div>
+						    </div>
+						    <br><br>
+						    <div class="row post-form-row">
+							    <div class="col-sm-8">
+							    	<div class="input-group">
+					        			<span class="input-group-addon">Description: </span>
+					        			<textarea type="text" placeholder="What's happening? " class="form-control" ng-model="newPost.description"></textarea>
+							        </div>
+							     </div>
+							</div>
+						</div>
+						<br>
+							<button class="btn btn-primary listing-button" 
+			  				ng-click="addPost(newPost)" 
+			  				ng-show="addPost">Add
+			  				</button>
+					</div>
+					
+					<!-- Edit Posted Blog-->
+					<div class="listing-form" ng-if="editPost">
+
+				        <h3>Edit a Post</h3>
+
+				        <div class="row post-form-row">
+				        	<div class="col-sm-8">
+				        		<div class="input-group">
+				        			<span class="input-group-addon">Title: </span>
+				        			<input 
+						              	type="text" 
+						              	placeholder="Title" 
+						              	class="form-control" 
+						              	ng-model="existingPost.title">
+						        </div>
+						    </div>
+						    <br><br>
+						    <div class="row post-form-row">
+							    <div class="col-sm-8">
+							    	<div class="input-group">
+					        			<span class="input-group-addon">Description: </span>
+					        			<textarea type="text" placeholder="What's happening? " class="form-control" ng-model="existingPost.description"></textarea>
+							        </div>
+							     </div>
+							</div>
+						</div>
+						<br>
+
+							<!-- Saving Edited Post -->
+							<button 
+					           	class="btn btn-primary listing-button"
+					           	ng-click="saveEditPost()"	
+					           	ng-show="editPost">Save
+					        </button>
+
+					        <!-- Delete Existing Post -->
+					        <button 
+					           	class="btn btn-primary listing-button"
+					           	ng-click="deletePost(existingPost)"	
+					           	ng-show="editPost">Delete
+					        </button>
+					</div>
+
+				<!-- Blog Posts -->
+				<h3>Recent Posts</h3>
+				<div class="col-sm-9 post-form" ng-repeat="post in posts | orderBy: '-id'">
+					<div ng-hide="showDetails">
+						<h3 id="{{post.id}}">{{post.title}}</h3>
+						<p>{{post.description}}</p>
+
+						<button class="btn btn-xs btn-primary"
+								ng-click="modifyPost(post)"
+								>Edit
+						</button>
+
+						<button class="btn btn-xs btn-primary"
+								ng-click="commentPost = !commentPost"
+								>Comment</button>
+						<br>
+
+						<div class="col-sm-9" ng-show="commentPost == true">
+							<p><span class="badge">{{post.comments.length}}</span>Comments:</p>
+
+							<textarea type="text" placeholder="Leave a comment " class="form-control" ng-model="newComment.description"></textarea>
+
+							<button class="btn btn-xs btn-primary" ng-click="addComment(post, newComment)">Save</button>
+						</div>
+
+						<div class="col-sm-9">
+							<span class="container" ng-repeat="comment in post.comments">{{comment.description + ' ' + comment.time}}</span>	
+							<br>
+						</div>
+
+						<div class="details" ng-show="showDetails == true">
+							<h4>
+								<span class="label label-primary">Post ID: {{post.id}}</span>
+								<span class="glyphicon glyphicon-time">Time: 
+								{{post.timedate}}</span>
+							</h4>
+						</div>
+				</div>
+				</div>
+			</div>
+		</div>
+
+	  </body>
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
+	  <script src="app.js"></script>
+	  <script src="scripts/blogController.js"> </script>
+ </html>
